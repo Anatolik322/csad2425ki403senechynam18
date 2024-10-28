@@ -1,4 +1,4 @@
-name: Build, Deploy, and Test
+name: build, Deploy and testing
 
 on:
     push:
@@ -22,7 +22,11 @@ jobs:
             - name: Встановлення залежностей Python
               run: |
                   python -m pip install --upgrade pip
-                  pip install -r client/requirements.txt  # Переконайтесь, що є файл requirements.txt, якщо це потрібно
+                  if [ -f client/requirements.txt ]; then
+                      pip install -r client/requirements.txt
+                  else
+                      echo "Файл requirements.txt не знайдено."
+                  fi
 
             - name: Компіляція коду Arduino
               run: |
