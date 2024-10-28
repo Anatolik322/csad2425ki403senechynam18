@@ -1,0 +1,55 @@
+name: Build, Deploy, and Test
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Завантаження коду
+              uses: actions/checkout@v2
+
+            - name: Налаштування Python
+              uses: actions/setup-python@v2
+              with:
+                  python-version: "3.x"
+
+            - name: Встановлення залежностей Python
+              run: |
+                  python -m pip install --upgrade pip
+                  pip install -r client/requirements.txt  # Переконайтесь, що є файл requirements.txt, якщо це потрібно
+
+            - name: Компіляція коду Arduino
+              run: |
+                  mkdir -p deploy
+                  arduino-cli compile --fqbn arduino:avr:uno server/server.ino
+                  cp server/server.ino.arduino.avr.uno.hex deploy/
+
+            - name: Деплой бінарних файлів
+              run: |
+                  cp client/client.py deploy/
+                  echo "Бінарні файли задеплоєні в папку deploy."
+
+            - name: Завантаження коду на Arduino
+              run: |
+                  arduino-cli upload -p COM3 --fqbn arduino:avr:uno server/server.ino
+              env:
+                  ARDUINO_BOARD: arduino:avr:uno
+                  SERIAL_PORT: COM3
+
+    test:
+        runs-on: ubuntu-latest
+        needs: build
+
+        steps:
+            - name: Завантаження коду
+              uses: actions/checkout@v2
+
+            - name: Запуск тестів
+              run: |
+                  python client/client.py
