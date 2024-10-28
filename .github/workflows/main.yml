@@ -1,4 +1,4 @@
-name: Побудова, Деплой та Тестування
+name: build, deploy, test
 
 on:
     push:
