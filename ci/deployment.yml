@@ -22,7 +22,6 @@ jobs:
             - name: Встановлення залежностей Python
               run: |
                   python -m pip install --upgrade pip
-                  pip install -r client/requirements.txt  # Переконайтесь, що є файл requirements.txt, якщо це потрібно
 
             - name: Компіляція коду Arduino
               run: |
