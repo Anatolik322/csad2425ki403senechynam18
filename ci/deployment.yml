@@ -1,4 +1,4 @@
-name: Build, Deploy, and Test
+name: Побудова, Деплой та Тестування
 
 on:
     push:
@@ -19,9 +19,11 @@ jobs:
               with:
                   python-version: "3.x"
 
-            - name: Встановлення залежностей Python
+            - name: Встановлення Arduino CLI
               run: |
-                  python -m pip install --upgrade pip
+                  curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+                  sudo mv ./arduino-cli /usr/local/bin/
+                  arduino-cli config init
 
             - name: Компіляція коду Arduino
               run: |
