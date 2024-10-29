@@ -19,23 +19,11 @@ jobs:
               with:
                   python-version: "3.x"
 
-            - name: Компіляція коду Arduino
-              run: |
-                  mkdir -p deploy
-                  arduino-cli compile --fqbn arduino:avr:uno server/server.ino
-                  cp server/server.ino.arduino.avr.uno.hex deploy/
-
+          
             - name: Деплой бінарних файлів
               run: |
                   cp client/client.py deploy/
                   echo "Бінарні файли задеплоєні в папку deploy."
-
-            - name: Завантаження коду на Arduino
-              run: |
-                  arduino-cli upload -p COM3 --fqbn arduino:avr:uno server/server.ino
-              env:
-                  ARDUINO_BOARD: arduino:avr:uno
-                  SERIAL_PORT: COM3
 
     test:
         runs-on: ubuntu-latest
