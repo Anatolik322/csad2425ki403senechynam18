@@ -3,7 +3,7 @@ name: build, deploy, test
 on:
     push:
         branches:
-            - main
+            - develop
     pull_request:
 
 jobs:
